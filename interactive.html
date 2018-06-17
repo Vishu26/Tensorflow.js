@@ -4,17 +4,18 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 	</head>
 	<body>
-		x : <input type="text" id="x" placeholder="eg: 45, 23, 67" />
+		x : <input type="text" id="x" />
 		<br />
-		y : <input type="text" id="y" placeholder="eg: 45, 23, 67" />
+		y : <input type="text" id="y" />
 		<br />
 		Number of Layers : <input type="number" id="nol" />
 		<br />
-		Units in Each Layers : <input type="text" id="units" placeholder="eg: 45, 23, 67" />
+		Units in Each Layers : <input type="text" id="units" />
 		<br />
-		Predict : <input type="text" id="predict" placeholder="eg: 45, 23, 67" />
+		Predict : <input type="text" id="predict" />
 		<br /><br />
 		<input type="button" id="sub" value="Submit" />
+		<input type="button" id="res" value="Reset" />
 
 		<script type="text/javascript">
 			
@@ -22,17 +23,20 @@
 
 				$("#sub").click(function(){
 
-					let x = $("#x").val()
-					x = x.replace(/\s+/, '').split(',').map(x=>parseInt(x))
-					let y = $("#y").val()
-					y = y.replace(/\s+/, '').split(',').map(y=>parseInt(y))
+					var xs = $("#x").val()
+					let x = xs.replace(/\s+/, '').split(',').map(xs=>parseInt(xs))
 
-					let layers = parseInt($("#nol").val())
-					let unit = $("#units").val()
-					unit = unit.replace(/\s+/, '').split(',').map(unit=>parseInt(unit))
+					var ys = $("#y").val()
+					let y = ys.replace(/\s+/, '').split(',').map(ys=>parseInt(ys))
 
-					let pred = $("#predict").val()
-					pred = pred.replace(/\s+/, '').split(',').map(pred=>parseInt(pred))
+					var lay = $("#nol").val()
+					let layers = parseInt(lay)
+
+					var un = $("#units").val()
+					let unit = un.replace(/\s+/, '').split(',').map(un=>parseInt(un))
+
+					var pr = $("#predict").val()
+					let pred = pr.replace(/\s+/, '').split(',').map(pr=>parseInt(pr))
 
 					const model = tf.sequential()
 
@@ -54,11 +58,22 @@
 
 					model.fit(x, y, {epochs:1000}).then(()=>{
 
-				console.log(model.predict(tf.tensor2d(pred, [pred.length, 1])).dataSync())
+						console.log(model.predict(tf.tensor2d(pred, [pred.length, 1])).dataSync())
 			})
 
 
 
+				})
+
+				$('#res').click(function(){
+
+					$('#x').val('')
+					$('#y').val('')
+					$('#nol').val('')
+					$('#units').val('')
+					$('#predict').val('')
+
+					console.log("HI")
 				})
 			})
 
