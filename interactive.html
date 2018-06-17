@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.6"> </script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		x : <input type="text" id="x" />
+		<br />
+		y : <input type="text" id="y" />
+		<br />
+		Number of Layers : <input type="number" id="nol" />
+		<br />
+		Units in Each Layers : <input type="text" id="units" />
+		<br />
+		Predict : <input type="text" id="predict" />
+		<br /><br />
+		<input type="button" id="sub" value="Submit" />
+
+		<script type="text/javascript">
+			
+			$(document).ready(function(){
+
+				$("#sub").click(function(){
+
+					let x = $("#x").val()
+					x = x.replace(/\s+/, '').split(',').map(x=>parseInt(x))
+					let y = $("#y").val()
+					y = y.replace(/\s+/, '').split(',').map(y=>parseInt(y))
+
+					let layers = parseInt($("#nol").val())
+					let unit = $("#units").val()
+					unit = unit.replace(/\s+/, '').split(',').map(unit=>parseInt(unit))
+
+					let pred = $("#predict").val()
+					pred = pred.replace(/\s+/, '').split(',').map(pred=>parseInt(pred))
+
+					const model = tf.sequential()
+
+					for (var i=0;i<layers;i++){
+						if(i==0){
+							model.add(tf.layers.dense({units:unit[i], inputShape:[1]}))
+						}
+						else{
+							model.add(tf.layers.dense({units:unit[i]}))
+						}
+						
+					}
+					model.add(tf.layers.dense({units:1}))
+
+					model.compile({loss:'meanSquaredError', optimizer:'sgd'})
+
+					x = tf.tensor2d(x, [x.length, 1])
+					y = tf.tensor2d(y, [y.length, 1])
+
+					model.fit(x, y, {epochs:1000}).then(()=>{
+
+				console.log(model.predict(tf.tensor2d(pred, [pred.length, 1])).dataSync())
+			})
+
+
+
+				})
+			})
+
+		</script>
+	</body>
+</html>
