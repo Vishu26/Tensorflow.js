@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.6"> </script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			
+			const model = tf.sequential()
+			model.add(tf.layers.dense({units:1, inputShape:[1]}))
+
+			model.compile({loss:'meanSquaredError', optimizer:'sgd'})
+
+			const x = tf.tensor2d([1, 2, 3, 4], [4, 1])
+			const y = tf.tensor2d([2, 4, 6, 8], [4, 1])
+
+			model.fit(x, y, {epochs:1000}).then(()=>{
+
+				console.log(model.predict(tf.tensor2d([9], [1, 1])).dataSync())
+			})
+		</script>
+</html>
