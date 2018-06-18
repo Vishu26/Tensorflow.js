@@ -1,0 +1,59 @@
+<html>
+	<head>
+		<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.11.6"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	</head>
+	<body>
+		<canvas width="256" height="256" style="background: black; margin-left: 28%; margin-top: 10%" id="view"></canvas>
+		<script type="text/javascript">
+			var cv = document.getElementById('view')
+			var canvas = cv.getContext('2d')
+			var rect = cv.getBoundingClientRect();
+			var x = rect.left
+			var y = rect.top
+		</script>
+		&emsp;&emsp;<canvas width="256" height="256" style="background: black;" id="label"></canvas>
+
+		<script type="text/javascript">
+			var lab = document.getElementById('label')
+			var label = lab.getContext('2d')
+			label.fillStyle = "#ffffff"
+			label.font = "120px Arial";
+			label.fillText("0",256/2-30,256/2+40);
+		</script>
+		<br /><br />
+
+		<input type='button' value='Submit' id='sub' style="margin-left: 31%" />
+		&emsp;&emsp;&emsp;&emsp;<input type='button' value='Reset' id='res' />
+
+		<script type="text/javascript">
+			
+			$(document).ready(function(){
+				canvas.fillStyle = "#ffffff"
+
+				$('#view').on("mouseup", function(){
+					cv.onmousemove=null
+				})
+				$(document).on("mouseup", function(){
+					cv.onmousemove=null
+				})
+
+				$('#view').on("mousedown", function(event){
+					canvas.moveTo(event.pageX-x, event.pageY-y)
+
+					cv.onmousemove = function(ev){
+						console.log(ev.pageX-rect.left)
+						canvas.strokeStyle = "white"
+						canvas.lineWidth = 9
+						canvas.lineTo(ev.pageX-x, ev.pageY-y)
+						canvas.stroke()
+					}
+				})
+
+				$('#res').click(function(){
+					window.location.reload()
+				})
+			})
+		</script>
+	</body>
+</html>
